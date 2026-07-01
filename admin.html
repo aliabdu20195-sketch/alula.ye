@@ -173,3 +173,79 @@ body{font-family:'Segoe UI',Tahoma,Arial,sans-serif;background:var(--bg-light);c
 </aside>
 <main class="main-content">
 <div class="top-bar"><h1 id="pageTitle">📊 لوحة التحكم</h1><div class="user-info"><div><div class="user-name">مدير المدرسة</div><div class="user-role">مدير النظام</div></div><div class="user-avatar">👤</div></div></div>
+<div class="content-section active" id="dashboard">
+<div class="stats-grid">
+<div class="stat-card"><div class="stat-icon blue">🖼️</div><div class="stat-details"><h4>إجمالي الصور</h4><div class="number" id="totalImages">0</div></div></div>
+<div class="stat-card"><div class="stat-icon orange">⬆️</div><div class="stat-details"><h4>الصور المرفوعة اليوم</h4><div class="number" id="todayImages">0</div></div></div>
+<div class="stat-card"><div class="stat-icon green">💾</div><div class="stat-details"><h4>حجم التخزين المستخدم</h4><div class="number" id="storageUsed">0 MB</div></div></div>
+<div class="stat-card"><div class="stat-icon red">🗑️</div><div class="stat-details"><h4>الصور المحذوفة</h4><div class="number" id="deletedImages">0</div></div></div>
+</div>
+<div class="card"><div class="card-header"><h3>🚀 اختصارات سريعة</h3></div><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:15px"><button class="btn btn-success" onclick="showSection('upload',null);document.querySelector('.sidebar-nav a:nth-child(2)').click()"><span>⬆️</span><span>رفع صور جديدة</span></button><button class="btn btn-primary" onclick="showSection('gallery',null);document.querySelector('.sidebar-nav a:nth-child(3)').click()"><span>🖼️</span><span>عرض معرض الصور</span></button><button class="btn btn-secondary" onclick="window.open('../index.html','_blank')"><span>🌐</span><span>عرض الموقع</span></button></div></div>
+</div>
+<div class="content-section" id="upload">
+<div class="card"><div class="card-header"><h3>⬆️ رفع صور جديدة</h3></div>
+<div class="upload-zone" id="uploadZone" onclick="document.getElementById('fileInput').click()"><span class="upload-icon">📤</span><h4>اسحب الصور هنا أو انقر للاختيار</h4><p>يدعم: JPG, PNG, GIF, WEBP (الحد الأقصى 10 ميجابايت لكل صورة)</p><input type="file" id="fileInput" multiple accept="image/*" onchange="handleFiles(this.files)"></div>
+<div class="progress-bar" id="progressBar" style="display:none"><div class="progress-fill" id="progressFill"></div></div>
+<div class="image-preview-area" id="previewArea" style="display:none"><h4 style="margin-bottom:15px">📋 معاينة الصور المختارة</h4><div class="preview-grid" id="previewGrid"></div><div style="margin-top:20px;display:flex;gap:10px;justify-content:center"><button class="btn btn-success" onclick="uploadImages()"><span>✅</span><span>تأكيد الرفع</span></button><button class="btn btn-secondary" onclick="clearPreview()"><span>❌</span><span>إلغاء</span></button></div></div>
+</div>
+<div class="card"><div class="card-header"><h3>📝 معلومات إضافية</h3></div>
+<div class="form-row"><div class="form-group"><label>عنوان الصورة</label><input type="text" id="imageTitle" placeholder="مثال: يوم الرياضة"></div><div class="form-group"><label>الفئة</label><select id="imageCategory"><option value="general">عام</option><option value="sports">أنشطة رياضية</option><option value="academic">أنشطة أكاديمية</option><option value="events">مناسبات واحتفالات</option><option value="facilities">مرافق المدرسة</option><option value="students">الطلاب</option></select></div></div>
+<div class="form-group"><label>وصف الصورة</label><textarea id="imageDescription" placeholder="أضف وصفاً للصورة..."></textarea></div>
+</div>
+</div>
+<div class="content-section" id="gallery">
+<div class="card"><div class="card-header"><h3>🖼️ معرض الصور</h3><div style="display:flex;gap:10px"><select class="form-group" style="width:auto;padding:8px 12px" id="filterCategory" onchange="filterGallery()"><option value="all">جميع الفئات</option><option value="general">عام</option><option value="sports">أنشطة رياضية</option><option value="academic">أنشطة أكاديمية</option><option value="events">مناسبات واحتفالات</option><option value="facilities">مرافق المدرسة</option><option value="students">الطلاب</option></select><button class="btn btn-danger" onclick="deleteAllImages()"><span>🗑️</span><span>حذف الكل</span></button></div></div>
+<div class="gallery-grid" id="galleryGrid"></div>
+<div class="empty-state" id="emptyGallery" style="display:none"><div class="icon">📭</div><h4>لا توجد صور</h4><p>لم يتم رفع أي صور بعد. ابدأ برفع صور جديدة!</p><button class="btn btn-primary" onclick="showSection('upload',null);document.querySelector('.sidebar-nav a:nth-child(2)').click()"><span>⬆️</span><span>رفع صور جديدة</span></button></div>
+</div>
+</div>
+<div class="content-section" id="settings">
+<div class="card"><div class="card-header"><h3>⚙️ إعدادات الموقع</h3></div>
+<div class="form-group"><label>اسم المدرسة</label><input type="text" id="schoolName" value="مدارس العلا الأهلية النموذجية"></div>
+<div class="form-group"><label>الشعار</label><input type="text" id="schoolTagline" value="تعليم حديث لبناء جيل المستقبل"></div>
+<div class="form-row"><div class="form-group"><label>رقم الهاتف</label><input type="text" id="schoolPhone" value=""></div><div class="form-group"><label>البريد الإلكتروني</label><input type="email" id="schoolEmail" value=""></div></div>
+<div class="form-group"><label>عنوان المدرسة</label><input type="text" id="schoolAddress" value="يريم، حي اللقايا"></div>
+<div style="margin-top:20px"><button class="btn btn-success" onclick="saveSettings()"><span>💾</span><span>حفظ الإعدادات</span></button></div>
+</div>
+<div class="card"><div class="card-header"><h3>🔐 تغيير كلمة المرور</h3></div>
+<div class="form-group"><label>كلمة المرور الحالية</label><input type="password" id="currentPassword"></div>
+<div class="form-group"><label>كلمة المرور الجديدة</label><input type="password" id="newPassword"></div>
+<div class="form-group"><label>تأكيد كلمة المرور الجديدة</label><input type="password" id="confirmPassword"></div>
+<div style="margin-top:20px"><button class="btn btn-primary" onclick="changePassword()"><span>🔑</span><span>تغيير كلمة المرور</span></button></div>
+</div>
+</div>
+</main>
+</div>
+<div class="image-viewer-overlay" id="imageViewer" onclick="closeViewer()"><button class="close-viewer" onclick="closeViewer()">✕</button><img src="" alt="عرض الصورة" id="viewerImage"></div>
+<div class="modal-overlay" id="deleteModal"><div class="modal"><div class="modal-header"><h3>⚠️ تأكيد الحذف</h3><button class="close-btn" onclick="closeDeleteModal()">✕</button></div><div class="modal-body"><p>هل أنت متأكد من حذف هذه الصورة؟ لا يمكن التراجع عن هذا الإجراء.</p></div><div class="modal-footer"><button class="btn btn-secondary" onclick="closeDeleteModal()">إلغاء</button><button class="btn btn-danger" onclick="confirmDelete()">🗑️ حذف</button></div></div></div>
+<script>
+let images=JSON.parse(localStorage.getItem('schoolImages'))||[];
+let selectedFiles=[];
+let deleteTarget=null;
+function login(){const u=document.getElementById('username').value,p=document.getElementById('password').value,e=document.getElementById('loginError');if(u==='admin'&&p==='123456'){document.getElementById('loginScreen').classList.add('hidden');document.getElementById('adminLayout').classList.add('active');updateStats();loadGallery();showToast('✅','تم تسجيل الدخول بنجاح!')}else{e.classList.add('show');setTimeout(()=>e.classList.remove('show'),3000)}}
+function logout(){document.getElementById('loginScreen').classList.remove('hidden');document.getElementById('adminLayout').classList.remove('active');document.getElementById('password').value='';showToast('👋','تم تسجيل الخروج بنجاح!')}
+function showSection(s,l){if(l){document.querySelectorAll('.sidebar-nav a').forEach(a=>a.classList.remove('active'));l.classList.add('active')}document.querySelectorAll('.content-section').forEach(x=>x.classList.remove('active'));document.getElementById(s).classList.add('active');const t={dashboard:'📊 لوحة التحكم',upload:'⬆️ رفع الصور',gallery:'🖼️ معرض الصور',settings:'⚙️ إعدادات الموقع'};document.getElementById('pageTitle').textContent=t[s]||'';if(s==='gallery')loadGallery();if(s==='dashboard')updateStats()}
+const uz=document.getElementById('uploadZone');uz.addEventListener('dragover',e=>{e.preventDefault();uz.classList.add('dragover')});uz.addEventListener('dragleave',()=>uz.classList.remove('dragover'));uz.addEventListener('drop',e=>{e.preventDefault();uz.classList.remove('dragover');handleFiles(e.dataTransfer.files)});
+function handleFiles(f){selectedFiles=Array.from(f).filter(x=>x.type.startsWith('image/'));if(!selectedFiles.length){showToast('⚠️','الرجاء اختيار ملفات صور فقط!','warning');return}const pg=document.getElementById('previewGrid');pg.innerHTML='';selectedFiles.forEach((file,i)=>{const r=new FileReader();r.onload=e=>{const d=document.createElement('div');d.className='preview-item';d.innerHTML=`<img src="${e.target.result}" alt="${file.name}"><button class="remove-btn" onclick="removeFile(${i})">✕</button><div class="image-info">${file.name}</div>`;pg.appendChild(d)};r.readAsDataURL(file)});document.getElementById('previewArea').style.display='block'}
+function removeFile(i){selectedFiles.splice(i,1);handleFiles(selectedFiles);if(!selectedFiles.length)clearPreview()}
+function clearPreview(){selectedFiles=[];document.getElementById('previewArea').style.display='none';document.getElementById('fileInput').value='';document.getElementById('imageTitle').value='';document.getElementById('imageDescription').value=''}
+function uploadImages(){if(!selectedFiles.length){showToast('⚠️','الرجاء اختيار صور أولاً!','warning');return}const pb=document.getElementById('progressBar'),pf=document.getElementById('progressFill');pb.style.display='block';const t=document.getElementById('imageTitle').value||'صورة بدون عنوان',c=document.getElementById('imageCategory').value,desc=document.getElementById('imageDescription').value||'';let up=0;selectedFiles.forEach((file,i)=>{const r=new FileReader();r.onload=e=>{images.push({id:Date.now()+i,name:file.name,src:e.target.result,title:t+(selectedFiles.length>1?` (${i+1})`:''),category:c,description:desc,date:new Date().toISOString(),size:file.size});up++;pf.style.width=(up/selectedFiles.length*100)+'%';if(up===selectedFiles.length){localStorage.setItem('schoolImages',JSON.stringify(images));setTimeout(()=>{pb.style.display='none';pf.style.width='0%';clearPreview();showToast('✅',`تم رفع ${up} صورة بنجاح!`);updateStats()},500)}};r.readAsDataURL(file)})}
+function loadGallery(){const g=document.getElementById('galleryGrid'),e=document.getElementById('emptyGallery'),f=document.getElementById('filterCategory').value;let fi=images;if(f!=='all')fi=images.filter(x=>x.category===f);if(!fi.length){g.innerHTML='';e.style.display='block';return}e.style.display='none';g.innerHTML=fi.map(img=>`<div class="gallery-item" data-id="${img.id}"><div class="image-wrapper"><img src="${img.src}" alt="${img.title}" loading="lazy"><div class="image-overlay"><button class="view-btn" onclick="viewImage('${img.src}')">👁️</button><button class="delete-btn" onclick="openDeleteModal(${img.id})">🗑️</button></div></div><div class="image-details"><h4>${img.title}</h4><p>${formatDate(img.date)} | ${formatSize(img.size)}</p></div></div>`).join('')}
+function filterGallery(){loadGallery()}
+function viewImage(s){document.getElementById('viewerImage').src=s;document.getElementById('imageViewer').classList.add('active')}
+function closeViewer(){document.getElementById('imageViewer').classList.remove('active')}
+function openDeleteModal(id){deleteTarget=id;document.getElementById('deleteModal').classList.add('active')}
+function closeDeleteModal(){deleteTarget=null;document.getElementById('deleteModal').classList.remove('active')}
+function confirmDelete(){if(deleteTarget){images=images.filter(x=>x.id!==deleteTarget);localStorage.setItem('schoolImages',JSON.stringify(images));loadGallery();updateStats();showToast('🗑️','تم حذف الصورة بنجاح!')}closeDeleteModal()}
+function deleteAllImages(){if(!images.length){showToast('⚠️','لا توجد صور للحذف!','warning');return}if(confirm('هل أنت متأكد من حذف جميع الصور؟ لا يمكن التراجع عن هذا الإجراء!')){images=[];localStorage.setItem('schoolImages',JSON.stringify(images));loadGallery();updateStats();showToast('🗑️','تم حذف جميع الصور!')}}
+function saveSettings(){const s={name:document.getElementById('schoolName').value,tagline:document.getElementById('schoolTagline').value,phone:document.getElementById('schoolPhone').value,email:document.getElementById('schoolEmail').value,address:document.getElementById('schoolAddress').value};localStorage.setItem('schoolSettings',JSON.stringify(s));showToast('💾','تم حفظ الإعدادات بنجاح!')}
+function changePassword(){const c=document.getElementById('currentPassword').value,n=document.getElementById('newPassword').value,co=document.getElementById('confirmPassword').value;if(c!=='123456'){showToast('❌','كلمة المرور الحالية غير صحيحة!','error');return}if(n.length<6){showToast('⚠️','كلمة المرور الجديدة يجب أن تكون 6 أحرف على الأقل!','warning');return}if(n!==co){showToast('❌','كلمة المرور الجديدة غير متطابقة!','error');return}showToast('🔑','تم تغيير كلمة المرور بنجاح!');document.getElementById('currentPassword').value='';document.getElementById('newPassword').value='';document.getElementById('confirmPassword').value=''}
+function updateStats(){document.getElementById('totalImages').textContent=images.length;const t=new Date().toDateString();document.getElementById('todayImages').textContent=images.filter(x=>new Date(x.date).toDateString()===t).length;const ts=images.reduce((s,x)=>s+(x.size||0),0);document.getElementById('storageUsed').textContent=(ts/(1024*1024)).toFixed(2)+' MB';document.getElementById('deletedImages').textContent=parseInt(localStorage.getItem('deletedCount')||'0')}
+function showToast(i,m,t='success'){const c=document.getElementById('toastContainer'),to=document.createElement('div');to.className=`toast ${t}`;to.innerHTML=`<span class="toast-icon">${i}</span><span>${m}</span>`;c.appendChild(to);setTimeout(()=>{to.style.opacity='0';to.style.transform='translateX(-100px)';setTimeout(()=>to.remove(),400)},3000)}
+function formatDate(d){return new Date(d).toLocaleDateString('ar-SA',{year:'numeric',month:'short',day:'numeric'})}
+function formatSize(b){if(b<1024)return b+' B';if(b<1048576)return(b/1024).toFixed(1)+' KB';return(b/1048576).toFixed(1)+' MB'}
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeViewer();closeDeleteModal()}});
+document.getElementById('password').addEventListener('keypress',e=>{if(e.key==='Enter')login()});
+</script>
+</body>
+</html>
